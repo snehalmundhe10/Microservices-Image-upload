@@ -14,12 +14,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   images.init({
-    id: DataTypes.UUID,
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true
+    },
     bucket: DataTypes.STRING,
-    key: DataTypes.STRING
+    key: DataTypes.STRING,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'images',
+    timestamps: true
   });
   return images;
 };
