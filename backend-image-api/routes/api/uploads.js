@@ -3,6 +3,7 @@ const router = express.Router();
 const models = require("../../models");
 const sharp = require("sharp");
 const multer = require("multer");
+const jwt = require('jsonwebtoken');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const { v4: uuidv4 } = require('uuid');
@@ -13,6 +14,26 @@ const s3 = new aws.S3({
 });
 
 const S3_BUCKET = "image-upload-storage"
+
+ function requireAuth(req, res, next) {
+  if (!req.headers || !req.headers.authorization) {
+    return res.status(401).send({message: 'No authorization headers.'});
+  }
+
+  const tokenBearer = req.headers.authorization.split(' ');
+  if (tokenBearer.length != 2) {
+    return res.status(401).send({message: 'Malformed token.'});
+  }
+
+  const token = tokenBearer[1];
+  return jwt.verify(token, c.config.jwt.secret, (err, decoded) => {
+    if (err) {
+      return res.status(500).send({auth: false, message: 'Failed to authenticate.'});
+    }
+    return next();
+  });
+}
+
 
 async function uploadToS3(key, buffer, mimetype) {
   return new Promise((resolve, reject) => {
@@ -77,7 +98,7 @@ router.get("/api/uploads", async (req, res) => {
   res.send(uploadList);
 });
 
-router.post("/api/uploads", upload.single('image'), async (req, res) => {
+router.post("/api/uploads", upload.single('image'), requireAuth,async (req, res) => {
   const id = uuidv4();
   const thumbnailId = uuidv4()
   const thumbnail = await sharp(req.file.buffer)

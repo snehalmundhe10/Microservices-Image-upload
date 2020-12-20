@@ -1,44 +1,26 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import Upload from "./components/image-upload/uploads";
-import Gallery from "./components/image-upload/Gallary"
+import React, { Component } from 'react';
 import './App.css';
+import ImageMain from './components/image-upload/image-main'
+import Register from './components/register-login/register'
+import {BrowserRouter  as Router, Route } from 'react-router-dom' ;
+import SignIn from './components/register-login/signin';
 
-function transformUploads(uploads) {
-  return uploads.map(u => ({
-    original: u.imageUrl,
-    thumbnail: u.thumbnailUrl
-  }));
-}
 
-function App() {
-  const [images, setImages] = useState(null);
+ export default class App extends Component{
 
-  const fetchUploads = useCallback(() => {
-    fetch('http://localhost:8000/api/uploads')
-      .then(response => response.json().then(data => setImages(transformUploads(data))))
-      .catch(console.error)
-  }, []);
-
-  useEffect(() => {
-    fetchUploads();
-  }, [fetchUploads])
-
+  render(){
   return (
-    <>
-      <div className="container">
-        <div className="upload-container">
-          <Upload fetchUploads={fetchUploads} />
-        </div>
-      </div>
-      <div className="container">
-        <div className="gallery-container">
-          {images && images.length ? (
-            <Gallery images={images} />
-          ) : null}
-        </div>
-      </div>
-    </>
+     <div>
+       <Router>      
+          <Route path="/"  exact component={Register}  />
+           <Route path="/api/uploads" component={ ImageMain}  /> 
+          <Route path="/register" component ={Register}  />
+          <Route path="/signin" component ={ SignIn}  />
+         </Router>
+      
+       {/* <ImageMain/> */}
+     </div> 
   );
 }
 
-export default App;
+}
