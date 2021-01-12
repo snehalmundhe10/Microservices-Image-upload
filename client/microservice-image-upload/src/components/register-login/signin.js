@@ -101,25 +101,7 @@ export default class SignIn extends Component{
  
   render(){
   return (
-   <div style={{marginTop: 100}} id="signinDiv">
-     <div id="requiredAlert" class="alert alert-warning" style={{display:'none'}}>
-        <strong>Alert!</strong> The email and password fields are required!!
-      </div>
-      <div id="wrongFormatEmail" class="alert alert-warning" style={{display:'none'}}>
-        <strong>Alert!</strong> The email should be in format "xyz@xyz.com"
-      </div>
-      <div id="wrongLengthPassword" class="alert alert-warning" style={{display:'none'}}>
-        <strong>Alert!</strong> The password shoud be atleast 6 character long
-      </div>
-      <div id="wrongFormatPassword" class="alert alert-warning" style={{display:'none'}}>
-        <strong>Alert!</strong> The password should contain atleast 1 digit and atleast one capital letter
-      </div>
-      <div id="wrongEmail" class="alert alert-warning" style={{display:'none'}}>
-        <strong>Alert!</strong> The email doesn't exist!!
-      </div>
-      <div id="wrongPassword" class="alert alert-warning" style={{display:'none'}}>
-        <strong>Alert!</strong> The password you entered is wrong!!
-      </div>
+   <div style={{marginTop: 100}}>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
